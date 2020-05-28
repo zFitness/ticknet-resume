@@ -71,7 +71,7 @@
 
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn block>退出</v-btn>
+        <v-btn block to="/admin/login">退出</v-btn>
       </div>
     </template>
   </v-navigation-drawer>

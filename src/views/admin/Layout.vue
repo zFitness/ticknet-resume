@@ -39,7 +39,7 @@
 
         <v-btn
           text
-          @click="logout"
+          to="/admin/login"
         >
           <v-icon>mdi-logout</v-icon>
         </v-btn>
