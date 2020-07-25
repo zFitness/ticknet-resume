@@ -19,9 +19,8 @@
 
         <v-text-field
           v-model="classes"
-          :counter="10"
           :rules="classRules"
-          label="2.年级，学院，专业，班级"
+          label="2.年级，学院，专业，班级(18-计科-xx)"
           required
         ></v-text-field>
 
@@ -29,8 +28,7 @@
           v-model="phone"
           :counter="11"
           :rules="phoneRules"
-          label="3.电话号码"
-          required
+          label="3.电话号码(选填)"
         ></v-text-field>
 
         <v-text-field
@@ -61,13 +59,21 @@
           :items="department_id==1?items1:items2"
           label="6.请选择岗位"
           v-model="group_id"
+          :rules="groupRules"
+        ></v-select>
+
+        <v-select
+          :items="department_id==1?items1:items2"
+          label="7.请选择等级"
+          v-model="group_id"
+          :rules="groupRules"
         ></v-select>
 
         <v-textarea
           solo
           v-model="reason"
           name="input-7-4"
-          label="7.为什么想加入工作室"
+          label="7.为什么想加入工作室(选填)"
         ></v-textarea>
 
         <v-textarea
@@ -75,6 +81,7 @@
           v-model="about_myself"
           name="input-7-4"
           label="8.自我介绍"
+          :rules="myselfRules"
         ></v-textarea>
 
         <v-btn
@@ -101,6 +108,38 @@
         关闭
       </v-btn>
     </v-snackbar>
+    <v-dialog
+      v-model="snackbar_success"
+      width="500"
+      persistent
+    >
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          提交成功
+        </v-card-title>
+
+        <v-card-text>
+          恭喜你，提交成功。请等待审核， 你可以在主页面查看进度。
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="handleSubmitSuccess"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -118,22 +157,35 @@ export default {
         v => (v && v.length <= 10) || "姓名不能超过10个字符"
       ],
       classes: "",
-      classRules: [],
+      classRules: [v => !!v || "必须输入专业信息"],
       phone: "",
       phoneRules: [],
-      group_id: "",
+      group_id: 0,
+      groupRules: [v => v != 0 || "必须选择专业"],
       reason: "",
       about_myself: "",
+      myselfRules: [v => !!v || "请输入自我介绍"],
       department_id: 1,
       items1: [
         { text: "前端", value: 1 },
         { text: "后端", value: 2 },
-        { text: "运维", value: 3 }
+        { text: "运维", value: 3 },
+        { text: "实习生", value: 4 }
       ],
       items2: [
         { text: "策划", value: 6 },
         { text: "产品", value: 4 },
         { text: "新媒体", value: 5 }
+      ],
+      items3: [
+        {
+          id: 1,
+          group_id: 7,
+          rank: 1,
+          name: "实习生",
+          status: 1,
+          desc: "研发实习生"
+        }
       ],
       email: "",
       emailRules: [
@@ -141,10 +193,14 @@ export default {
         v => /.+@.+\..+/.test(v) || "邮箱格式不正确"
       ],
       toast: "提交成功",
-      snackbar: false
+      snackbar: false,
+      snackbar_success: false
     };
   },
   methods: {
+    handleSubmitSuccess() {
+      this.$router.push("/");
+    },
     validate() {
       if (this.$refs.form.validate()) {
         let data = {
@@ -158,11 +214,23 @@ export default {
           about_myself: this.about_myself
         };
 
-        apiForm(data).then(resp => {
-          console.log(resp);
-          this.toast = resp.message;
-          this.snackbar = true;
-        });
+        apiForm(data)
+          .then(resp => {
+            console.log(resp);
+            if (resp.code == 0) {
+              this.snackbar_success = true;
+            } else {
+              this.toast = resp.message;
+              this.snackbar = true;
+            }
+          })
+          .catch(err => {
+            this.toast = err;
+            this.snackbar = true;
+          });
+      } else {
+        this.toast = "请填写完整信息";
+        this.snackbar = true;
       }
     }
   }

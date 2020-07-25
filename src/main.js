@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 
+import VueWechatTitle from 'vue-wechat-title' 
+Vue.use(VueWechatTitle);
+
 Vue.config.productionTip = false
 
 new Vue({

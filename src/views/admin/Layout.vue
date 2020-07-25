@@ -39,7 +39,7 @@
 
         <v-btn
           text
-          to="/admin/login"
+          @click="logout"
         >
           <v-icon>mdi-logout</v-icon>
         </v-btn>
@@ -88,7 +88,7 @@ export default {
     },
     logout() {
       localStorage.removeItem("token");
-      this.$router.push("/admin/login");
+      this.$router.push("/login");
     }
   }
 };

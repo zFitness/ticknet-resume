@@ -43,27 +43,31 @@ const routes = [
         name: 'Intro',
         component: () => import('../views/Intro.vue'),
         meta: {
-          title: '职位介绍'
-        }
-      }
+          title: '职位介绍',
+        },
+      },
     ],
   },
   {
     path: '/admin',
     name: 'AdminLayout',
     component: () => import('../views/admin/Layout.vue'),
-    redirect: '/admin/',
+    redirect: '/admin/home',
     children: [
       {
-        path: '/',
+        path: 'home',
         name: 'AdminHome',
-        component: () => import('../views/admin/Home.vue')
+        component: () => import('../views/admin/Home.vue'),
       },
-      
+      {
+        path: 'audit',
+        name: 'ResumeAudit',
+        component: () => import('../views/admin/ResumeAudit.vue'),
+      }
     ],
   },
   {
-    path: '/admin/login',
+    path: '/login',
     name: 'AdminLogin',
     component: () => import('../views/admin/Login.vue'),
   },
@@ -72,5 +76,11 @@ const routes = [
 const router = new VueRouter({
   routes,
 })
-
+router.beforeEach((to, from, next) => {
+  let reg = /\/admin/
+  if (reg.test(to.path) && !localStorage.token) {
+    return next('/login')
+  }
+  next()
+})
 export default router
