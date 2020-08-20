@@ -46,26 +46,27 @@
         >
 
           <v-radio
-            label="研发组"
-            value="1"
+            v-for="(item, key) in items4"
+            :key="key"
+            :label="item.department_name"
+            :value="key"
           ></v-radio>
-          <v-radio
-            label="运营组"
-            value="2"
-          ></v-radio>
+          
         </v-radio-group>
 
         <v-select
-          :items="department_id==1?items1:items2"
+          :items="items4[department_id].groups"
           label="6.请选择岗位"
-          v-model="group_id"
+          v-model="group_rank"
+          :item-text="'group_name'"
+          :item-value="'rank'"
           :rules="groupRules"
         ></v-select>
 
         <v-select
-          :items="department_id==1?items1:items2"
+          :items="group_rank"
           label="7.请选择等级"
-          v-model="group_id"
+          :item-text="'name'"
           :rules="groupRules"
         ></v-select>
 
@@ -160,31 +161,202 @@ export default {
       classRules: [v => !!v || "必须输入专业信息"],
       phone: "",
       phoneRules: [],
-      group_id: 0,
+      group_rank: [],
       groupRules: [v => v != 0 || "必须选择专业"],
       reason: "",
       about_myself: "",
       myselfRules: [v => !!v || "请输入自我介绍"],
       department_id: 1,
-      items1: [
-        { text: "前端", value: 1 },
-        { text: "后端", value: 2 },
-        { text: "运维", value: 3 },
-        { text: "实习生", value: 4 }
-      ],
-      items2: [
-        { text: "策划", value: 6 },
-        { text: "产品", value: 4 },
-        { text: "新媒体", value: 5 }
-      ],
-      items3: [
+      items4: [
         {
           id: 1,
-          group_id: 7,
-          rank: 1,
-          name: "实习生",
-          status: 1,
-          desc: "研发实习生"
+          department_name: "研发组",
+          desc: null,
+          groups: [
+            {
+              id: 1,
+              department_id: 1,
+              group_name: "前端工程师",
+              desc: null,
+              rank: [
+                {
+                  id: 2,
+                  group_id: 1,
+                  rank: 2,
+                  name: "初级工程师",
+                  status: 1,
+                  desc: "初级前端工程师"
+                },
+                {
+                  id: 3,
+                  group_id: 1,
+                  rank: 3,
+                  name: "中级工程师",
+                  status: 1,
+                  desc: "中级前端工程师"
+                }
+              ]
+            },
+            {
+              id: 2,
+              department_id: 1,
+              group_name: "后端工程师",
+              desc: null,
+              rank: [
+                {
+                  id: 5,
+                  group_id: 2,
+                  rank: 2,
+                  name: "初级工程师",
+                  status: 1,
+                  desc: "初级后端工程师"
+                },
+                {
+                  id: 6,
+                  group_id: 2,
+                  rank: 3,
+                  name: "中级工程师",
+                  status: 1,
+                  desc: "中级后端工程师"
+                }
+              ]
+            },
+            {
+              id: 3,
+              department_id: 1,
+              group_name: "运维与安全工程师",
+              desc: null,
+              rank: [
+                {
+                  id: 8,
+                  group_id: 3,
+                  rank: 2,
+                  name: "初级",
+                  status: 1,
+                  desc: "初级运维与安全工程师"
+                },
+                {
+                  id: 9,
+                  group_id: 3,
+                  rank: 3,
+                  name: "中级",
+                  status: 1,
+                  desc: "中级运维与安全工程师"
+                }
+              ]
+            },
+            {
+              id: 7,
+              department_id: 1,
+              group_name: "实习生",
+              desc: "研发实习生",
+              rank: [
+                {
+                  id: 1,
+                  group_id: 7,
+                  rank: 1,
+                  name: "实习生",
+                  status: 1,
+                  desc: "研发实习生"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 2,
+          department_name: "运营组",
+          desc: null,
+          groups: [
+            {
+              id: 4,
+              department_id: 2,
+              group_name: "产品运营",
+              desc: null,
+              rank: [
+                {
+                  id: 11,
+                  group_id: 4,
+                  rank: 2,
+                  name: "初级",
+                  status: 1,
+                  desc: "初级产品运营"
+                },
+                {
+                  id: 12,
+                  group_id: 4,
+                  rank: 3,
+                  name: "中级",
+                  status: 1,
+                  desc: "中级产品运营"
+                }
+              ]
+            },
+            {
+              id: 5,
+              department_id: 2,
+              group_name: "新媒体",
+              desc: null,
+              rank: [
+                {
+                  id: 14,
+                  group_id: 5,
+                  rank: 2,
+                  name: "初级",
+                  status: 1,
+                  desc: "初级新媒体"
+                },
+                {
+                  id: 15,
+                  group_id: 5,
+                  rank: 3,
+                  name: "中级",
+                  status: 1,
+                  desc: "中级新媒体"
+                }
+              ]
+            },
+            {
+              id: 6,
+              department_id: 2,
+              group_name: "策划",
+              desc: null,
+              rank: [
+                {
+                  id: 17,
+                  group_id: 6,
+                  rank: 2,
+                  name: "初级",
+                  status: 1,
+                  desc: "初级策划"
+                },
+                {
+                  id: 18,
+                  group_id: 6,
+                  rank: 3,
+                  name: "中级",
+                  status: 1,
+                  desc: "中级策划"
+                }
+              ]
+            },
+            {
+              id: 8,
+              department_id: 2,
+              group_name: "实习生",
+              desc: "运营实习生",
+              rank: [
+                {
+                  id: 10,
+                  group_id: 8,
+                  rank: 1,
+                  name: "实习生",
+                  status: 1,
+                  desc: "运营实习生"
+                }
+              ]
+            }
+          ]
         }
       ],
       email: "",
